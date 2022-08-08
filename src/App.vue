@@ -43,20 +43,18 @@
                          <span @click="getNextVerse" class="h-8 w-8 ml-2 bg-gray-100 border border-gray-300 text-gray-500 shadow rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-500 hover:text-white">
                           <ChevronDownIcon class="text-sm h-5 w-5" />
                         </span>
-                        <span @click="missedIt" class="h-8 w-8 ml-2 bg-gray-100 border border-gray-300 text-gray-500 shadow rounded-full flex items-center justify-center cursor-pointer hover:bg-red-500 hover:text-white">
+                        <span @click="missedIt(verse)" class="h-8 w-8 ml-2 bg-gray-100 border border-gray-300 text-gray-500 shadow rounded-full flex items-center justify-center cursor-pointer hover:bg-red-500 hover:text-white">
                           <LockOpenIcon class="text-sm h-5 w-5" />
                         </span>
-                        <span @click="gotIt" class="h-8 w-8 ml-2 bg-gray-100 border border-gray-300 text-gray-500 shadow rounded-full flex items-center justify-center cursor-pointer hover:bg-green-500 hover:text-white">
+                        <span @click="gotIt(verse)" class="h-8 w-8 ml-2 bg-gray-100 border border-gray-300 text-gray-500 shadow rounded-full flex items-center justify-center cursor-pointer hover:bg-green-500 hover:text-white">
                           <LockClosedIcon class="text-sm h-5 w-5" />
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <span :class="[statusMap[verse.status].iconBackground, 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white']">
-                    <span class="text-white text-sm">v{{verse.id}}</span>
-                  </span>
+                <div class="relative">
+                  <ActionButtons :verse="verse"></ActionButtons>
                 </div>
               </div>
             </div>
@@ -110,6 +108,7 @@
 <script>
 import { ChevronDownIcon, QuestionMarkCircleIcon, RefreshIcon, LockClosedIcon, LockOpenIcon } from '@heroicons/vue/solid'
 import { ref, onMounted } from 'vue'
+import ActionButtons from './components/ActionButtons.vue'
 
   function randomIntFromRange(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
@@ -117,6 +116,7 @@ import { ref, onMounted } from 'vue'
 
   export default {
     components: {
+      ActionButtons,
       ChevronDownIcon,
       QuestionMarkCircleIcon,
       RefreshIcon,
@@ -125,20 +125,6 @@ import { ref, onMounted } from 'vue'
     },
     data() {
       return {
-        statusMap: {
-          1: { // memorized
-            iconBackground: 'bg-green-500'
-          },
-          2: { // needs work
-            iconBackground: 'bg-red-500'
-          },
-          3: { // default
-            iconBackground: 'bg-gray-500'
-          },
-          4: { // needed a hint
-            iconBackground: 'bg-orange-500'
-          }
-        },
         quran: [],
         timeline: [],
         selectedSurahID: null,
@@ -187,12 +173,12 @@ import { ref, onMounted } from 'vue'
           ...this.selectedSurah.verses[nextVerseIdx]
         })
       },
-      gotIt() {
-        this.timeline[this.timeline.length - 1].status = 1
+      gotIt(verse) {
+        verse.status = 1
         this.getNextVerse()
       },
-      missedIt() {
-        this.timeline[this.timeline.length - 1].status = 2
+      missedIt(verse) {
+        verse.status = 2
         this.getNextVerse()
       },
       resetApp() {
