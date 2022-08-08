@@ -1,3 +1,7 @@
+# Quran Memorization Randomizer
+View live demo at: https://quranmemorizationrandomizer.sbokhari.repl.co/
+
+---
 # VueJS-with-Vite
 
 This template should help get you started developing with Vue 3 in Vite.
